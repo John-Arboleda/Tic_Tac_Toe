@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+require_relative '../lib/game_logic'
+
 # Player Class: Initialize player name and marker
 class Player
   attr_reader :name, :marker
@@ -62,34 +64,27 @@ module UserInteraction
     play_board.print_board
     play_board.plays_array
   end
-end
 
-include UserInteraction
-
-def game_flow(user1, user2, play_board)
-  while play_board.moves_counter <= 9
-    updated_board = user_move(user1, user2, play_board)
-    # player_turn = if play_board.moves_counter.odd?
-    #                 user1
-    #               else
-    #                 user2
-    #               end
-    # puts "#{player_turn.name} please enter a move:"
-    # move_p = gets.chomp.to_i
-    # play_board.make_a_move(move_p, player_turn.marker)
-    # play_board.print_board
-    if updated_board[0] == 1
-      puts "Wins" #{player_turn.name} Wins!"
-      return puts 'Game Over'
-    elsif play_board.moves_counter > 9
-      puts "It's a Draw"
-      return puts 'Game Over'
+  def print_winner(winning_marker, user1, user2)
+    if user1.marker == winning_marker
+      puts "#{user1.name} Wins!"
+    else
+      puts "#{user2.name} Wins!"
     end
   end
 end
 
-# def print_winner(w_marker,player)
-#   print "#{player.name} Wins!" if player.marker == w_marker
-# end
+include UserInteraction
+include GameLogic
+
+def game_flow(user1, user2, play_board)
+
+  while play_board.moves_counter <= 9
+    updated_board = user_move(user1, user2, play_board)
+    winning_marker = check_winner(updated_board)
+    return print_winner(winning_marker, user1, user2) if winning_marker
+    return puts "It's a Draw" if play_board.moves_counter == 10
+  end
+end
 
 game_flow(player1, player2, board1)
