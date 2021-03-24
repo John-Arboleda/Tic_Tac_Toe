@@ -18,13 +18,27 @@ class Player
 
 end
 
-puts "Enter player 1 name"
-player_1_name = Player.new(gets.chomp,"X")
-puts "Enter player 2 name"
-player_2_name = Player.new(gets.chomp,"O")
+#puts "Enter player 1 name"
+#player_1_name = Player.new(gets.chomp,"X")
+#puts "Enter player 2 name"
+#player_2_name = Player.new(gets.chomp,"O")
 
 class Board 
   attr_accessor :plays_array
-  def initialize ()
+  def initialize (plays_array)
+    @plays_array=plays_array
+  end
+
+  def print_board 
+    col_separator, row_separator = " | ", " ----+---+----"
+    puts row_separator
+    3.times do |i|
+        print col_separator
+        3.times { |j| print plays_array[j+(i*3)].to_s << col_separator}
+        puts "\n" << row_separator
+    end
+  end
 end
 
+#board1=Board.new([1,2,3,4,"X",6,7,8,9])
+#board1.print_board
