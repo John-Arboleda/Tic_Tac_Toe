@@ -49,25 +49,47 @@ player2 = Player.new(gets.chomp, 'O')
 board1 = Board.new([1, 2, 3, 4, 5, 6, 7, 8, 9])
 board1.print_board
 
-def game_flow(user1, user2, play_board)
-  while play_board.moves_counter <= 9
+module UserInteraction
+  def user_move(user1, user2, play_board)
     player_turn = if play_board.moves_counter.odd?
-                    user1
-                  else
-                    user2
-                  end
+      user1
+    else
+      user2
+    end
     puts "#{player_turn.name} please enter a move:"
     move_p = gets.chomp.to_i
     play_board.make_a_move(move_p, player_turn.marker)
     play_board.print_board
-    if move_p == 1
-      puts "#{player_turn.name} Wins!"
+    play_board.plays_array
+  end
+end
+
+include UserInteraction
+
+def game_flow(user1, user2, play_board)
+  while play_board.moves_counter <= 9
+    updated_board = user_move(user1, user2, play_board)
+    # player_turn = if play_board.moves_counter.odd?
+    #                 user1
+    #               else
+    #                 user2
+    #               end
+    # puts "#{player_turn.name} please enter a move:"
+    # move_p = gets.chomp.to_i
+    # play_board.make_a_move(move_p, player_turn.marker)
+    # play_board.print_board
+    if updated_board[0] == 1
+      puts "Wins" #{player_turn.name} Wins!"
       return puts 'Game Over'
-    elsif play_board.moves_counter > 4
+    elsif play_board.moves_counter > 9
       puts "It's a Draw"
       return puts 'Game Over'
     end
   end
 end
+
+# def print_winner(w_marker,player)
+#   print "#{player.name} Wins!" if player.marker == w_marker
+# end
 
 game_flow(player1, player2, board1)
