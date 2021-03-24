@@ -1,3 +1,30 @@
 #!/usr/bin/env ruby
 
-puts 'Hello World'
+class Player
+  attr_reader :name
+  attr_reader :marker
+  def initialize(name, marker)
+    @name = name
+    @marker = marker
+  end
+
+  def print_name
+    puts "#{@name}"
+  end
+
+  def marker
+    puts "#{@marker}"
+  end
+
+end
+
+puts "Enter player 1 name"
+player_1_name = Player.new(gets.chomp,"X")
+puts "Enter player 2 name"
+player_2_name = Player.new(gets.chomp,"O")
+
+class Board 
+  attr_accessor :plays_array
+  def initialize ()
+end
+
