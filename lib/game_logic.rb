@@ -8,8 +8,3 @@ module GameLogic
         false
     end
 end
-
-# include GameLogic
-
-# ex_array=["X","X","X",4,5,6,7,8,9]
-# puts check_winner(ex_array)
