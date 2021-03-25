@@ -1,3 +1,73 @@
 #!/usr/bin/env ruby
+# Player Class: Initialize player name and marker
+class Player
+  attr_reader :name, :marker
 
-puts 'Hello World'
+  def initialize(name, marker)
+    @name = name
+    @marker = marker
+  end
+end
+
+# Board Class: Draws the board with the current play, checks valid moves, counts moves
+class Board
+  attr_accessor :plays_array
+  attr_reader :moves_counter
+
+  def initialize(plays_array)
+    @plays_array = plays_array
+    @moves_counter = 1
+  end
+
+  def print_board
+    col_separator = ' | '
+    row_separator = ' +---+---+---+'
+    puts row_separator
+    3.times do |i|
+      print col_separator
+      3.times { |j| print (@plays_array[j + (i * 3)]).to_s + col_separator }
+      puts "\n#{row_separator}"
+    end
+  end
+
+  def make_a_move(num, marker)
+    if !num.is_a?(Integer) || !num.between?(1, 9)
+      puts 'Invalid move. Please enter a number between 1 and 9'
+    elsif @plays_array[num - 1].is_a?(String)
+      puts 'Invalid move. Position already taken'
+    else
+      @plays_array[num - 1] = marker
+      @moves_counter += 1
+    end
+  end
+end
+
+puts 'Enter player 1 name'
+player1 = Player.new(gets.chomp, 'X')
+puts 'Enter player 2 name'
+player2 = Player.new(gets.chomp, 'O')
+board1 = Board.new([1, 2, 3, 4, 5, 6, 7, 8, 9])
+board1.print_board
+
+def game_flow(user1, user2, play_board)
+  while play_board.moves_counter <= 9
+    player_turn = if play_board.moves_counter.odd?
+                    user1
+                  else
+                    user2
+                  end
+    puts "#{player_turn.name} please enter a move:"
+    move_p = gets.chomp.to_i
+    play_board.make_a_move(move_p, player_turn.marker)
+    play_board.print_board
+    if move_p == 1
+      puts "#{player_turn.name} Wins!"
+      return puts 'Game Over'
+    elsif play_board.moves_counter > 4
+      puts "It's a Draw"
+      return puts 'Game Over'
+    end
+  end
+end
+
+game_flow(player1, player2, board1)
