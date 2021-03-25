@@ -1,4 +1,29 @@
 #!/usr/bin/env ruby
+require_relative '../lib/game_logic'
+
+module UserInteraction
+  def user_move(user1, user2, play_board)
+    player_turn = if play_board.moves_counter.odd?
+                    user1
+                  else
+                    user2
+                  end
+    puts "#{player_turn.name} please enter a move:"
+    move_p = gets.chomp.to_i
+    play_board.make_a_move(move_p, player_turn.marker)
+    play_board.print_board
+    play_board.plays_array
+  end
+
+  def print_winner(winning_marker, user1, user2)
+    if user1.marker == winning_marker
+      puts "#{user1.name} Wins!"
+    else
+      puts "#{user2.name} Wins!"
+    end
+  end
+end
+
 # Player Class: Initialize player name and marker
 class Player
   attr_reader :name, :marker
@@ -40,33 +65,33 @@ class Board
       @moves_counter += 1
     end
   end
+  include UserInteraction
+  include GameLogic
 end
 
-puts 'Enter player 1 name'
-player1 = Player.new(gets.chomp, 'X')
-puts 'Enter player 2 name'
-player2 = Player.new(gets.chomp, 'O')
+playername = ''
+while playername.empty?
+  puts 'Enter player 1 name'
+  playername = gets.chomp
+  player1 = Player.new(playername, 'X')
+end
+
+playername = ''
+while playername.empty?
+  puts 'Enter player 2 name'
+  playername = gets.chomp
+  player2 = Player.new(playername, 'O')
+end
+
 board1 = Board.new([1, 2, 3, 4, 5, 6, 7, 8, 9])
 board1.print_board
 
 def game_flow(user1, user2, play_board)
   while play_board.moves_counter <= 9
-    player_turn = if play_board.moves_counter.odd?
-                    user1
-                  else
-                    user2
-                  end
-    puts "#{player_turn.name} please enter a move:"
-    move_p = gets.chomp.to_i
-    play_board.make_a_move(move_p, player_turn.marker)
-    play_board.print_board
-    if move_p == 1
-      puts "#{player_turn.name} Wins!"
-      return puts 'Game Over'
-    elsif play_board.moves_counter > 4
-      puts "It's a Draw"
-      return puts 'Game Over'
-    end
+    updated_board = play_board.user_move(user1, user2, play_board)
+    winning_marker = play_board.check_winner(updated_board)
+    return play_board.print_winner(winning_marker, user1, user2) if winning_marker
+    return puts "It's a Draw" if play_board.moves_counter == 10
   end
 end
 
