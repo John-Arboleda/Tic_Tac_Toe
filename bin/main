@@ -44,13 +44,6 @@ class Board
   end
 end
 
-puts 'Enter player 1 name'
-player1 = Player.new(gets.chomp, 'X')
-puts 'Enter player 2 name'
-player2 = Player.new(gets.chomp, 'O')
-board1 = Board.new([1, 2, 3, 4, 5, 6, 7, 8, 9])
-board1.print_board
-
 module UserInteraction
   def user_move(user1, user2, play_board)
     player_turn = if play_board.moves_counter.odd?
@@ -76,6 +69,23 @@ end
 
 include UserInteraction
 include GameLogic
+
+playername=''
+while playername.empty?
+  puts 'Enter player 1 name'
+  playername=gets.chomp
+  player1 = Player.new(playername, 'X')
+end
+
+playername=''
+while playername.empty?
+  puts 'Enter player 2 name'
+  playername=gets.chomp
+  player2 = Player.new(playername, 'O')
+end
+
+board1 = Board.new([1, 2, 3, 4, 5, 6, 7, 8, 9])
+board1.print_board
 
 def game_flow(user1, user2, play_board)
 
